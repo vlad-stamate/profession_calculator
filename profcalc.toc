@@ -1,0 +1,11 @@
+## Interface: 70100
+## Title: ProfCalc
+## Author: Vlad Stamate
+## Version: 0.1
+
+receipes.lua
+vlad_util.lua
+vlad_cost.lua
+vlad_ui.lua
+main.lua
+vlad.xml
