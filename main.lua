@@ -39,14 +39,45 @@ local current_mode = MODE_ONE
 mainframe = nil
 
 function start_scan_all()
-		print("Initiating all scan. Receipes "..number_rec);
-		receipe_id = 1
-		do_scan = 1
-		scan_current = 1
-		to_scan = gReceipes[receipe_id].number_items
-		current_stage = SCAN_INGREDIENTS
-		current_mode = MODE_ALL
-		print("|cff5555FF Scanning receipe "..receipe_id.."/"..number_rec.." - "..gReceipes[receipe_id].product)
+	print("Initiating all scan. Receipes "..number_rec);
+	receipe_id = 1
+	do_scan = 1
+	scan_current = 1
+	to_scan = gReceipes[receipe_id].number_items
+	current_stage = SCAN_INGREDIENTS
+	current_mode = MODE_ALL
+	print("|cff5555FF Scanning receipe "..receipe_id.."/"..number_rec.." - "..gReceipes[receipe_id].product)
+end
+
+function stop_scan_all()
+	receipe_id = number_rec
+end
+
+should_scan_receipe = {}
+
+should_scan_receipe[PROF_ALCHEMY_FLASK] = true
+should_scan_receipe[PROF_COOKING_NORMAL] = true
+should_scan_receipe[PROF_COOKING_NORMAL] = true
+
+function cooking_check_box()
+	if should_scan_receipe[PROF_COOKING_SIMPLE] == true then
+		should_scan_receipe[PROF_COOKING_SIMPLE] = false
+	else
+		should_scan_receipe[PROF_COOKING_SIMPLE] = true
+	end
+	if should_scan_receipe[PROF_COOKING_NORMAL] == true then
+		should_scan_receipe[PROF_COOKING_NORMAL] = false
+	else
+		should_scan_receipe[PROF_COOKING_NORMAL] = true
+	end
+end
+
+function alchemy_check_box()
+	if should_scan_receipe[PROF_ALCHEMY_FLASK] == true then
+		should_scan_receipe[PROF_ALCHEMY_FLASK] = false
+	else
+		should_scan_receipe[PROF_ALCHEMY_FLASK] = true
+	end
 end
 
 local function handler(msg, editbox)
@@ -223,6 +254,17 @@ function VLAD_OnUpdate(self, elapsed)
 		-- print("Stage "..current_stage)
 		-- print("VLAD_OnUpdate "..gAtr_ptime.." "..scan_items[scan_current])
 		if current_stage == SCAN_INGREDIENTS or current_stage == PROCESS_INGREDIENTS then
+			-- should we scan this?
+			if should_scan_receipe[gReceipes[receipe_id].profession] == false then
+				-- no, skip it
+				print("Skipping "..gReceipes[receipe_id].product)
+				receipe_id = receipe_id + 1
+				-- are we done?
+				if receipe_id == number_rec then
+					do_scan = 0
+					print("|cff5555FF DONE!")
+				end
+			else
 			-- local canQuery, canQueryAll
 		    -- canQuery,canQueryAll=CanSendAuctionQuery("list")
 		     -- while CanDoWholeQuery~=1 do
@@ -263,7 +305,7 @@ function VLAD_OnUpdate(self, elapsed)
 						end
 					end
 				--end
-			-- end
+			end
 		elseif current_stage == SCAN_PRODUCT then
 			-- print("Scanning for "..gReceipes[receipe_id].product)
 			QueryAuctionItems (gReceipes[receipe_id].product, 0, 110, 0, nil, nil, false, false, nil )
