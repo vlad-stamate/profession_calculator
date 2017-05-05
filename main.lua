@@ -318,7 +318,9 @@ function VLAD_OnUpdate(self, elapsed)
 				total_mat_cost = total_mat_cost + (gReceipes[receipe_id].items[i].ah_cost * gReceipes[receipe_id].items[i].count)
 			end
 			local gold, silver, copper = val2gsc(total_mat_cost)
-			-- print("Cost to make "..gold.." "..silver.." "..copper)
+			print("Cost to make "..gold.." "..silver.." "..copper)
+			gold, silver, copper = val2gsc(gReceipes[receipe_id].product_ah_cost)
+			print("Item cost "..gold.." "..silver.." "..copper)
 			-- what proffesion
 			if gReceipes[receipe_id].profession == PROF_COOKING_NORMAL then
 				cooking_estimate(total_mat_cost, gReceipes[receipe_id].product_ah_cost)

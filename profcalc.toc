@@ -1,4 +1,4 @@
-## Interface: 70100
+## Interface: 70200
 ## Title: ProfCalc
 ## Author: Vlad Stamate
 ## Version: 0.1
